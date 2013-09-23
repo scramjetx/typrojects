@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAForgeToolbox", "MyAForgeToolbox\MyAForgeToolbox.csproj", "{4323459C-9B6D-4E25-B295-238C3AF45576}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineGraph", "MyAForgeToolbox\LineGraph\LineGraph.csproj", "{348DB38B-EB1A-4EC2-881E-4695652035D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackingTest", "Main\TrackingTest.csproj", "{F69F04A0-3520-420C-867D-E0C39C0EC70D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4323459C-9B6D-4E25-B295-238C3AF45576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4323459C-9B6D-4E25-B295-238C3AF45576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4323459C-9B6D-4E25-B295-238C3AF45576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4323459C-9B6D-4E25-B295-238C3AF45576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{348DB38B-EB1A-4EC2-881E-4695652035D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{348DB38B-EB1A-4EC2-881E-4695652035D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{348DB38B-EB1A-4EC2-881E-4695652035D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{348DB38B-EB1A-4EC2-881E-4695652035D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F69F04A0-3520-420C-867D-E0C39C0EC70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F69F04A0-3520-420C-867D-E0C39C0EC70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F69F04A0-3520-420C-867D-E0C39C0EC70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F69F04A0-3520-420C-867D-E0C39C0EC70D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
