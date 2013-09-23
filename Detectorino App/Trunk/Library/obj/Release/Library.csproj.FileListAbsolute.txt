@@ -1,0 +1,5 @@
+D:\C# Projects\Detectorino App\Trunk\Library\bin\Release\Library.dll
+D:\C# Projects\Detectorino App\Trunk\Library\bin\Release\Library.pdb
+D:\C# Projects\Detectorino App\Trunk\Library\obj\Release\ResolveAssemblyReference.cache
+D:\C# Projects\Detectorino App\Trunk\Library\obj\Release\Library.dll
+D:\C# Projects\Detectorino App\Trunk\Library\obj\Release\Library.pdb
