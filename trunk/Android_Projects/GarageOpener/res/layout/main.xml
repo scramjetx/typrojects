@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:background="@drawable/droidbackground" android:keepScreenOn="true" android:orientation="vertical">
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:gravity="center" android:text="Droid Does Garage Openers" android:height="75px" android:textSize="10pt" android:typeface="sans"/>
+
+<CheckBox
+    android:id="@+id/CheckBoxScreen"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Screen ON/OFF Switch Enable?" >
+</CheckBox><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/CheckBoxRetryConn" android:text="Retry Connection?" android:checked="false"></CheckBox><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextViewStatus" android:text="NOT Connected"></TextView>
+<Button android:layout_gravity="bottom" android:layout_height="wrap_content" android:text="Enter Bluetooth ID" android:layout_width="wrap_content" android:id="@+id/buttonEnterMacId"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonOpenClose" android:layout_gravity="center" android:height="175px" android:width="10px" android:background="@drawable/droidbutton" android:textSize="24pt" android:layout_marginTop="100px" android:text="PUSH" android:hapticFeedbackEnabled="true"></Button>
+
+
+
+
+</LinearLayout>

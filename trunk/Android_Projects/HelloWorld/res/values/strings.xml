@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">FOOOOOOOOOOOOOLLLLLLL</string>
+    <string name="app_name">Hello World</string>
+<integer-array name="test"></integer-array>
+</resources>
