@@ -13,7 +13,6 @@ C_DEPS :=
 ASM_DEPS := 
 FLASH_IMAGE := 
 ELFS := 
-LSS := 
 AVRDUDEDUMMY := 
 S_DEPS := 
 SIZEDUMMY := 
