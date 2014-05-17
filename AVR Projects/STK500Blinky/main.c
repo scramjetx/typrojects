@@ -7,6 +7,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+#include "includes/bubble_display.h"
+
 int main(void) {
 
 	DDRA = (1<<PA0)|(1<<PA1); //Anodes
@@ -17,9 +19,9 @@ int main(void) {
 
     while(1) {
         PORTD = (0<<PD2)|(0<<PD3)|(0<<PD4)|(0<<PD5)|(0<<PD6); /* LED on or Pin High */
-        _delay_ms(200);
+        _delay_ms(100);
         PORTD = (1<<PD2)|(1<<PD3)|(1<<PD4)|(1<<PD5)|(1<<PD6); /* LED off or Pin Low */
-        _delay_ms(200);
+        _delay_ms(100);
     }
     return 0;
 }

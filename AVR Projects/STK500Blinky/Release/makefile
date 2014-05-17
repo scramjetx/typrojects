@@ -31,11 +31,13 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 FLASH_IMAGE += \
+STK500Blinky.hex \
 
 SIZEDUMMY += \
 sizedummy \
 
 AVRDUDEDUMMY += \
+avrdudedummy \
 
 
 # All Target
@@ -69,7 +71,7 @@ avrdudedummy: STK500Blinky.elf
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(ASM_DEPS)$(FLASH_IMAGE)$(ELFS)$(LSS)$(AVRDUDEDUMMY)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS) STK500Blinky.elf
+	-$(RM) $(OBJS)$(C_DEPS)$(ASM_DEPS)$(FLASH_IMAGE)$(ELFS)$(AVRDUDEDUMMY)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS) STK500Blinky.elf
 	-@echo ' '
 
 secondary-outputs: $(FLASH_IMAGE) $(SIZEDUMMY) $(AVRDUDEDUMMY)
