@@ -8,7 +8,6 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include .metadata/.plugins/org.eclipse.cdt.make.core/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -53,7 +52,7 @@ STK500Blinky.elf: $(OBJS) $(USER_OBJS)
 
 STK500Blinky.hex: STK500Blinky.elf
 	@echo 'Create Flash image (ihex format)'
-	-avr-objcopy -R .eeprom -O ihex STK500Blinky.elf  "STK500Blinky.hex"
+	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex STK500Blinky.elf  "STK500Blinky.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -65,7 +64,7 @@ sizedummy: STK500Blinky.elf
 
 avrdudedummy: STK500Blinky.elf
 	@echo 'Invoking: AVRDude'
-	C:\WinAVR-20100110\bin\avrdude -pt4313 -cusbtiny -Uflash:w:STK500Blinky.hex:a
+	C:\WinAVR-20100110\bin\avrdude -pnull -Uflash:w:STK500Blinky.hex:a
 	@echo 'Finished building: $@'
 	@echo ' '
 

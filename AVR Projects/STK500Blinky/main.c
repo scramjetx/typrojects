@@ -7,7 +7,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "includes/bubble_display.h"
+#include "Includes/bubble_display.h"
 
 int main(void) {
 
