@@ -6,7 +6,8 @@
 
 void init(int yaya)
 {
-
+	int i = 0;
+	yaya = i;
 
 
 }

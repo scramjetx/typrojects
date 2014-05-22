@@ -7,7 +7,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "Includes/bubble_display.h"
+//#include "includes\bubble_display.h"
 
 #define LOOP_RATE 100		//how fast to run the loop
 #define TICKS_PER_HZ 500	//how many ticks elapse per hz to get the loop rate
@@ -16,9 +16,10 @@ int main(void)
 {
 
 	uint8_t STATE = 1;
-	int32_t timer = 1;  //placeholder for timer ticks to know when to start main state machine and clock how fast it loops
+	int64_t timer = 1;  //placeholder for timer ticks to know when to start main state machine and clock how fast it loops
 
 	//timer must be incremented by an interrupt or equivalent...then reset when bottom of if statement
+
 
 	if(timer == TICKS_PER_HZ*LOOP_RATE)
 	{
