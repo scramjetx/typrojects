@@ -4,6 +4,36 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o (exit)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
                               ./bubble_display.o (__do_copy_data)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_clear_bss.o)
+                              ./bubble_display.o (__do_clear_bss)
+
+Allocating common symbols
+Common symbol       size              file
+
+segDpin             0x1               ./bubble_display.o
+segEpin             0x1               ./bubble_display.o
+segBport            0x1               ./bubble_display.o
+displayDigit4pin    0x1               ./bubble_display.o
+segFpin             0x1               ./bubble_display.o
+displayDigit2pin    0x1               ./bubble_display.o
+segDPpin            0x1               ./bubble_display.o
+displayDigit4port   0x1               ./bubble_display.o
+displayDigit1port   0x1               ./bubble_display.o
+segAport            0x1               ./bubble_display.o
+segEport            0x1               ./bubble_display.o
+displayDigit2port   0x1               ./bubble_display.o
+segApin             0x1               ./bubble_display.o
+segFport            0x1               ./bubble_display.o
+segGpin             0x1               ./bubble_display.o
+segCpin             0x1               ./bubble_display.o
+segBpin             0x1               ./bubble_display.o
+displayDigit3port   0x1               ./bubble_display.o
+segDPport           0x1               ./bubble_display.o
+segDport            0x1               ./bubble_display.o
+segCport            0x1               ./bubble_display.o
+displayDigit1pin    0x1               ./bubble_display.o
+segGport            0x1               ./bubble_display.o
+displayDigit3pin    0x1               ./bubble_display.o
 
 Memory Configuration
 
@@ -115,7 +145,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x10e
+.text           0x00000000      0x322
  *(.vectors)
  .vectors       0x00000000       0x2a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
                 0x00000000                __vectors
@@ -155,6 +185,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  *(.init4)
  .init4         0x00000036       0x16 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
                 0x00000036                __do_copy_data
+ .init4         0x0000004c       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_clear_bss.o)
+                0x0000004c                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -165,46 +197,48 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x0000004c        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
+ .init9         0x0000005c        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
  *(.init9)
  *(.text)
- .text          0x00000050        0x2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
-                0x00000050                __vector_1
-                0x00000050                __vector_12
-                0x00000050                __bad_interrupt
-                0x00000050                __vector_6
-                0x00000050                __vector_3
-                0x00000050                __vector_11
-                0x00000050                __vector_13
-                0x00000050                __vector_17
-                0x00000050                __vector_19
-                0x00000050                __vector_7
-                0x00000050                __vector_5
-                0x00000050                __vector_4
-                0x00000050                __vector_9
-                0x00000050                __vector_2
-                0x00000050                __vector_15
-                0x00000050                __vector_8
-                0x00000050                __vector_14
-                0x00000050                __vector_10
-                0x00000050                __vector_16
-                0x00000050                __vector_18
-                0x00000050                __vector_20
- .text          0x00000052       0x2a ./bubble_display.o
-                0x00000052                init
- .text          0x0000007c       0x8e ./main.o
-                0x0000007c                main
- .text          0x0000010a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
- .text          0x0000010a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
-                0x0000010a                . = ALIGN (0x2)
+ .text          0x00000060        0x2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
+                0x00000060                __vector_1
+                0x00000060                __vector_12
+                0x00000060                __bad_interrupt
+                0x00000060                __vector_6
+                0x00000060                __vector_3
+                0x00000060                __vector_11
+                0x00000060                __vector_13
+                0x00000060                __vector_17
+                0x00000060                __vector_19
+                0x00000060                __vector_7
+                0x00000060                __vector_5
+                0x00000060                __vector_4
+                0x00000060                __vector_9
+                0x00000060                __vector_2
+                0x00000060                __vector_15
+                0x00000060                __vector_8
+                0x00000060                __vector_14
+                0x00000060                __vector_10
+                0x00000060                __vector_16
+                0x00000060                __vector_18
+                0x00000060                __vector_20
+ .text          0x00000062       0x4c ./bubble_display.o
+                0x00000062                initDisplay
+ .text          0x000000ae      0x270 ./main.o
+                0x000000ae                main
+ .text          0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
+ .text          0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
+ .text          0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_clear_bss.o)
+                0x0000031e                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x0000010a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
- .text.libgcc   0x0000010a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
-                0x0000010a                . = ALIGN (0x2)
+ .text.libgcc   0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
+ .text.libgcc   0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
+ .text.libgcc   0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_clear_bss.o)
+                0x0000031e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000010a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
-                0x0000010a                exit
-                0x0000010a                _exit
+ .fini9         0x0000031e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
+                0x0000031e                exit
+                0x0000031e                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -223,11 +257,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000010a        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
+ .fini0         0x0000031e        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000010e                _etext = .
+                0x00000322                _etext = .
 
-.data           0x00800060       0x10 load address 0x0000010e
+.data           0x00800060       0x10 load address 0x00000322
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
@@ -251,6 +285,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  .data          0x00800070        0x0 ./main.o
  .data          0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
  .data          0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
+ .data          0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_clear_bss.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
@@ -259,7 +294,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
                 0x00800070                _edata = .
                 0x00800070                PROVIDE (__data_end, .)
 
-.bss            0x00800070        0x0
+.bss            0x00800070       0x18
                 0x00800070                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr25/crttn4313.o
@@ -267,18 +302,44 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  .bss           0x00800070        0x0 ./main.o
  .bss           0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
  .bss           0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_copy_data.o)
+ .bss           0x00800070        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_clear_bss.o)
  *(.bss*)
  *(COMMON)
-                0x00800070                PROVIDE (__bss_end, .)
-                0x0000010e                __data_load_start = LOADADDR (.data)
-                0x0000011e                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800070       0x18 ./bubble_display.o
+                0x00800070                segDpin
+                0x00800071                segEpin
+                0x00800072                segBport
+                0x00800073                displayDigit4pin
+                0x00800074                segFpin
+                0x00800075                displayDigit2pin
+                0x00800076                segDPpin
+                0x00800077                displayDigit4port
+                0x00800078                displayDigit1port
+                0x00800079                segAport
+                0x0080007a                segEport
+                0x0080007b                displayDigit2port
+                0x0080007c                segApin
+                0x0080007d                segFport
+                0x0080007e                segGpin
+                0x0080007f                segCpin
+                0x00800080                segBpin
+                0x00800081                displayDigit3port
+                0x00800082                segDPport
+                0x00800083                segDport
+                0x00800084                segCport
+                0x00800085                displayDigit1pin
+                0x00800086                segGport
+                0x00800087                displayDigit3pin
+                0x00800088                PROVIDE (__bss_end, .)
+                0x00000322                __data_load_start = LOADADDR (.data)
+                0x00000332                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800070        0x0
-                0x00800070                PROVIDE (__noinit_start, .)
+.noinit         0x00800088        0x0
+                0x00800088                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800070                PROVIDE (__noinit_end, .)
-                0x00800070                _end = .
-                0x00800070                PROVIDE (__heap_start, .)
+                0x00800088                PROVIDE (__noinit_end, .)
+                0x00800088                _end = .
+                0x00800088                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -296,15 +357,15 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
 .signature
  *(.signature*)
 
-.stab           0x00000000      0x5dc
+.stab           0x00000000      0x804
  *(.stab)
- .stab          0x00000000      0x3fc ./bubble_display.o
- .stab          0x000003fc      0x1e0 ./main.o
-                                0x39c (size before relaxing)
+ .stab          0x00000000      0x5f4 ./bubble_display.o
+ .stab          0x000005f4      0x210 ./main.o
+                                0x3cc (size before relaxing)
 
-.stabstr        0x00000000      0x796
+.stabstr        0x00000000      0xb05
  *(.stabstr)
- .stabstr       0x00000000      0x796 ./bubble_display.o
+ .stabstr       0x00000000      0xb05 ./bubble_display.o
 
 .stab.excl
  *(.stab.excl)

@@ -1,7 +1,23 @@
 
 #define SOME_CONST 99
 
-void init(int yaya);
+
+//these declarations below maybe not needed for port cause declared in function prototype and can be used in function without reassignment
+
+//holds port assignment for each pin
+//uint8_t segAport, segBport, segCport, segDport, segEport, segFport, segGport, segDPport;
+
+//holds pin # assignment when passed in
+//uint8_t segApin, segBpin, segCpin, segDpin, segEpin, segFpin, segGpin, segDPpin;
+
+
+
+//holds port assignment for each pin
+//uint8_t displayDigit1port, displayDigit2port, displayDigit3port, displayDigit4port;
+
+//holds pin# assignment when passed in
+//uint8_t displayDigit1pin, displayDigit2pin, displayDigit3pin, displayDigit4pin;
+
 
 uint8_t zero = 0b1111110; // 0
 uint8_t one = 0b0110000; // 1
@@ -41,4 +57,10 @@ uint8_t w = 0b0111111; // W
 	//0b0000000, // 90 'Z'  NO DISPLAY
 
 
+
+void initDisplay(uint8_t segAport, uint8_t segBport, uint8_t segCport, uint8_t segDport, uint8_t segEport, uint8_t segFport, uint8_t segGport, uint8_t segDPport,
+		uint8_t segApin, uint8_t segBpin, uint8_t segCpin, uint8_t segDpin, uint8_t segEpin, uint8_t segFpin, uint8_t segGpin, uint8_t segDPpin,
+		uint8_t displayDigit1port, uint8_t displayDigit2port, uint8_t displayDigit3port, uint8_t displayDigit4port,
+		uint8_t displayDigit1pin, uint8_t displayDigit2pin, uint8_t displayDigit3pin, uint8_t displayDigit4pin
+		);
 
