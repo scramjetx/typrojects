@@ -6,6 +6,36 @@
 
 //holds port assignment for each pin
 //uint8_t segAport, segBport, segCport, segDport, segEport, segFport, segGport, segDPport;
+#define SEG_A_PORT PORTD
+#define SEG_A_PIN  5
+
+#define SEG_B_PORT PORTD
+#define SEG_B_PIN  2
+
+#define SEG_C_PORT PORTB
+#define SEG_C_PIN  6
+
+#define SEG_D_PORT PORTA
+#define SEG_D_PIN  1
+
+#define SEG_E_PORT PORTD
+#define SEG_E_PIN  3
+
+#define SEG_F_PORT PORTB
+#define SEG_F_PIN  2
+
+#define SEG_G_PORT PORTA
+#define SEG_G_PIN  0
+
+#define SEG_DP_PORT PORTD
+#define SEG_DP_PIN  6
+
+//******Syntax error...wish this would work
+//wired up in hardware
+//                      A,     B,     C,     D,     E,     F,     G,     DP
+//#define SEG_PORTS [] {PORTD, PORTD, PORTB, PORTA, PORTD, PORTB, PORTA, PORTD}  //8
+//#define SEG_PINS []  {PD5,   PD2,   PB6,   PA1,   PD3,   PB2,   PA0,   PD6 }	//8
+
 
 //holds pin # assignment when passed in
 //uint8_t segApin, segBpin, segCpin, segDpin, segEpin, segFpin, segGpin, segDPpin;
@@ -58,9 +88,11 @@ uint8_t w = 0b0111111; // W
 
 
 
-void initDisplay(uint8_t segAport, uint8_t segBport, uint8_t segCport, uint8_t segDport, uint8_t segEport, uint8_t segFport, uint8_t segGport, uint8_t segDPport,
-		uint8_t segApin, uint8_t segBpin, uint8_t segCpin, uint8_t segDpin, uint8_t segEpin, uint8_t segFpin, uint8_t segGpin, uint8_t segDPpin,
-		uint8_t displayDigit1port, uint8_t displayDigit2port, uint8_t displayDigit3port, uint8_t displayDigit4port,
-		uint8_t displayDigit1pin, uint8_t displayDigit2pin, uint8_t displayDigit3pin, uint8_t displayDigit4pin
-		);
+//void initDisplay(uint8_t segAport, uint8_t segBport, uint8_t segCport, uint8_t segDport, uint8_t segEport, uint8_t segFport, uint8_t segGport, uint8_t segDPport,
+//		uint8_t segApin, uint8_t segBpin, uint8_t segCpin, uint8_t segDpin, uint8_t segEpin, uint8_t segFpin, uint8_t segGpin, uint8_t segDPpin,
+//		uint8_t displayDigit1port, uint8_t displayDigit2port, uint8_t displayDigit3port, uint8_t displayDigit4port,
+//		uint8_t displayDigit1pin, uint8_t displayDigit2pin, uint8_t displayDigit3pin, uint8_t displayDigit4pin
+//		);
+
+void initDisplay();
 

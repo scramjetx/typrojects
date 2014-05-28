@@ -3,6 +3,8 @@
 //Design Notes:
 //PortA not working...PA0 and PA1.  Has something to do with XTAL pins..suppose to change to IO if using internal oscillator.
 
+//Optimizations on.  Properties->Build->Settings->Optimizations
+
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include <util/delay.h>
@@ -12,13 +14,15 @@
 #define LOOP_RATE 100		//how fast to run the loop
 #define TICKS_PER_HZ 500	//how many ticks elapse per hz to get the loop rate
 
-#define SEG_A PD2
+
+
 
 int main(void)
 {
 	//Segment Anodes
 	DDRA = (1<<PA0)|(1<<PA1);
 	DDRD = (1<<PD2)|(1<<PD3)|(1<<PD4)|(1<<PD5)|(1<<PD6);
+	//PORTD = 1<<PD2;
 
 	//Segment Cathodes
 	DDRB = (1<<PB1)|(1<<PB2)|(1<<PB3)|(1<<PB4); 	//Cathodes set to output
@@ -29,9 +33,11 @@ int main(void)
 
 	//timer must be incremented by an interrupt or equivalent...then reset when bottom of if statement
 
+
 	while(1)
 	{
 
+		initDisplay();
 
 		if(timer == TICKS_PER_HZ*LOOP_RATE)
 		{
