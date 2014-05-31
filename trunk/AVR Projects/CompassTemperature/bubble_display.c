@@ -11,43 +11,36 @@
 //		)
 void initDisplay()
 {
+
+}
+
+
+void testDisplay()
+{
 	//got to OR them together. Otherwise it clears all the other bits
+		uint8_t delay = 10;
 
-	SEG_A_PORT = 1<<SEG_A_PIN;
-	_delay_ms(100);
-	SEG_B_PORT = SEG_A_PORT | 1<<SEG_B_PIN;
-	_delay_ms(100);
-	SEG_C_PORT = 1<<SEG_C_PIN;
-	_delay_ms(100);
-	SEG_D_PORT = 1<<SEG_D_PIN;
-	_delay_ms(100);
-	SEG_E_PORT = SEG_B_PORT | 1<<SEG_E_PIN;
-	_delay_ms(100);
-	SEG_F_PORT = SEG_C_PORT | 1<<SEG_F_PIN;
-	_delay_ms(100);
-	SEG_G_PORT = SEG_D_PORT | 1<<SEG_G_PIN;
-	_delay_ms(100);
-	SEG_DP_PORT = SEG_E_PORT | 1<<SEG_DP_PIN;
-	_delay_ms(100);
+		SEG_A_PORT |= 1<<SEG_A_PIN;
+		_delay_ms(delay);
+		SEG_B_PORT |= 1<<SEG_B_PIN;
+		_delay_ms(delay);
+		SEG_C_PORT |= 1<<SEG_C_PIN;
+		_delay_ms(delay);
+		SEG_D_PORT |= 1<<SEG_D_PIN;
+		_delay_ms(delay);
+		SEG_E_PORT |= 1<<SEG_E_PIN;
+		_delay_ms(delay);
+		SEG_F_PORT |= 1<<SEG_F_PIN;
+		_delay_ms(delay);
+		SEG_G_PORT |= 1<<SEG_G_PIN;
+		_delay_ms(delay);
+		SEG_DP_PORT |= 1<<SEG_DP_PIN;
+		_delay_ms(delay);
 
-//	SEG_A_PORT = 0<<SEG_A_PIN;
-//	_delay_ms(100);
-//	SEG_B_PORT = 0<<SEG_B_PIN;
-//	_delay_ms(100);
-//	SEG_C_PORT = 0<<SEG_C_PIN;
-//	_delay_ms(100);
-//	SEG_D_PORT = 0<<SEG_D_PIN;
-//	_delay_ms(100);
-//	SEG_E_PORT = 0<<SEG_E_PIN;
-//	_delay_ms(100);
-//	SEG_F_PORT = 0<<SEG_F_PIN;
-//	_delay_ms(100);
-//	SEG_G_PORT = 0<<SEG_G_PIN;
-//	_delay_ms(100);
-//	SEG_DP_PORT = 0<<SEG_DP_PIN;
-//	_delay_ms(100);
-
-
+		//resets the registers and effectively clears display
+		PORTA = 0;
+		PORTB = 0;
+		PORTD = 0;
 
 
 

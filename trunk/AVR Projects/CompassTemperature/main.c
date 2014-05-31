@@ -12,21 +12,23 @@
 //#include "includes\bubble_display.h"
 
 #define LOOP_RATE 100		//how fast to run the loop
-#define TICKS_PER_HZ 500	//how many ticks elapse per hz to get the loop rate
+#define TICKS_PER_HZ 10	//how many ticks elapse per hz to get the loop rate
 
-
+char *parseTempReading(int8_t);
 
 
 int main(void)
 {
 	//Segment Anodes
-	DDRA = (1<<PA0)|(1<<PA1);
-	DDRD = (1<<PD2)|(1<<PD3)|(1<<PD4)|(1<<PD5)|(1<<PD6);
-	//PORTD = 1<<PD2;
+	DDRA |= (1<<PA0) | (1<<PA1);
+	DDRB |= (1<<PB6) | (1<<PB2);
+	DDRD |= (1<<PD2) | (1<<PD3) | (1<<PD5) | (1<<PD6);
 
 	//Segment Cathodes
-	DDRB = (1<<PB1)|(1<<PB2)|(1<<PB3)|(1<<PB4); 	//Cathodes set to output
-	PORTB = (0<<PB1)|(0<<PB2)|(0<<PB3)|(0<<PB4);	//pin set low.
+	DDRB |= (1<<PB1) | (1<<PB3) | (1<<PB4); 	//Cathodes set to output
+	DDRD |= (1<<PD4);							//Cathodes set to output
+	PORTB |= (0<<PB1) | (0<<PB3) | (0<<PB4);	//pin set low.
+	PORTD |= (0<<PD4);							//pin set low.
 
 	uint8_t STATE = 1;
 	int64_t timer = 1;  //placeholder for timer ticks to know when to start main state machine and clock how fast it loops
@@ -37,7 +39,6 @@ int main(void)
 	while(1)
 	{
 
-		initDisplay();
 
 		if(timer == TICKS_PER_HZ*LOOP_RATE)
 		{
@@ -62,6 +63,15 @@ int main(void)
 			if(STATE == 2)
 			{
 
+				int8_t testTemp = 72;
+				char testTempArray [] = "999";
+
+				*testTempArray = parseTempReading(testTemp);
+
+				if(testTempArray[0] == '7')
+				{
+					testDisplay();
+				}
 
 				STATE = 3;	//transition to next state
 			}
@@ -74,14 +84,13 @@ int main(void)
 			if(STATE == 3)
 			{
 
+				//testDisplay();
 
 				STATE = 1; 	//return to first state
 			}
 
 			timer = 0;
 		} //end if
-
-
 
 		timer++;
 
@@ -91,4 +100,15 @@ int main(void)
 
 
 	return 0;
+}
+
+char *parseTempReading(int8_t i)
+{
+	char c [] = "000";
+
+	sprintf(c, "%d", i);
+
+
+
+	return *c;
 }
