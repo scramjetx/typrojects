@@ -1,7 +1,9 @@
 //ATTINY 4313 chip
 
 //Design Notes:
-//PortA not working...PA0 and PA1.  Has something to do with XTAL pins..suppose to change to IO if using internal oscillator.
+
+//What's Next?
+//take USART demo project that's functioning and create a .h and .c file and add it to the project and use it.  Very simple stuff for my needs
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 
@@ -14,6 +16,11 @@
 #define LOOP_RATE 100		//how fast to run the loop
 #define TICKS_PER_HZ 10	//how many ticks elapse per hz to get the loop rate
 
+
+//Main variables
+char tempDegArray [] = "999";  //hold the char string of temperature reading for display
+
+//Function Prototypes
 char *parseTempReading(int8_t);
 
 
@@ -64,14 +71,8 @@ int main(void)
 			{
 
 				int8_t testTemp = 72;
-				char testTempArray [] = "999";
 
-				*testTempArray = parseTempReading(testTemp);
-
-				if(testTempArray[0] == '7')
-				{
-					testDisplay();
-				}
+				*tempDegArray = parseTempReading(testTemp);
 
 				STATE = 3;	//transition to next state
 			}
@@ -83,8 +84,8 @@ int main(void)
 			//**********************************************
 			if(STATE == 3)
 			{
-
-				//testDisplay();
+				if(tempDegArray[2] == '2')
+					testDisplay();
 
 				STATE = 1; 	//return to first state
 			}
@@ -104,11 +105,9 @@ int main(void)
 
 char *parseTempReading(int8_t i)
 {
-	char c [] = "000";
+	char c [3] = "000";
 
 	sprintf(c, "%d", i);
-
-
 
 	return *c;
 }
