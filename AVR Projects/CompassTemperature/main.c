@@ -3,25 +3,27 @@
 //Design Notes:
 
 //What's Next?
-//take USART demo project that's functioning and create a .h and .c file and add it to the project and use it.  Very simple stuff for my needs
+//now can display digits so display them in the correct place. add digit 1-4 parameter for digitDisplay function
+//then can change test temp to larger number so it prints 003F or 072F for the temp...or maybe no leading 0's
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 
 #define F_CPU 8000000UL
 #include <avr/io.h>
+#include <inttypes.h>
 #include <util/delay.h>
 
 //#include "includes\bubble_display.h"
 
-#define LOOP_RATE 100		//how fast to run the loop
-#define TICKS_PER_HZ 10	//how many ticks elapse per hz to get the loop rate
+#define LOOP_RATE 1				//how fast to run the loop
+#define TICKS_PER_HZ 100000		//how many ticks elapse per hz to get the loop rate
 
 
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
 
 //Function Prototypes
-char *parseTempReading(int8_t);
+void parseTempReading(char *, int8_t);
 
 
 int main(void)
@@ -42,6 +44,10 @@ int main(void)
 
 	//timer must be incremented by an interrupt or equivalent...then reset when bottom of if statement
 
+	USART_Init();
+
+
+	int8_t testTemp = 0;
 
 	while(1)
 	{
@@ -70,9 +76,13 @@ int main(void)
 			if(STATE == 2)
 			{
 
-				int8_t testTemp = 72;
 
-				*tempDegArray = parseTempReading(testTemp);
+
+				parseTempReading(tempDegArray, testTemp);
+
+				testTemp++;
+				if(testTemp>9)
+					testTemp = 0;
 
 				STATE = 3;	//transition to next state
 			}
@@ -84,8 +94,17 @@ int main(void)
 			//**********************************************
 			if(STATE == 3)
 			{
-				if(tempDegArray[2] == '2')
-					testDisplay();
+				//test code
+//				if(tempDegArray[0] == '1')
+//					testDisplay();
+//
+//				USART_SendString(tempDegArray);
+//				USART_SendString("\n\r");
+				//end test code
+
+				computeDigitDisplay(tempDegArray[0]);
+
+
 
 				STATE = 1; 	//return to first state
 			}
@@ -103,11 +122,10 @@ int main(void)
 	return 0;
 }
 
-char *parseTempReading(int8_t i)
+void parseTempReading(char * c, int8_t i)
 {
-	char c [3] = "000";
-
+	//sprintf takes alot of memory to convert a int to a string/char array
+	//could possibly do a modulus operation by 10 to extract digits to save memory
 	sprintf(c, "%d", i);
 
-	return *c;
 }

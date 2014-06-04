@@ -2,6 +2,11 @@
 
 //these declarations below maybe not needed for port cause declared in function prototype and can be used in function without reassignment
 
+//defines ports that the led segments are on so we can clear them which resets the display
+#define SEG_PORTS1 PORTA
+#define SEG_PORTS2 PORTB
+#define SEG_PORTS3 PORTD
+
 //holds port assignment for each pin
 //uint8_t segAport, segBport, segCport, segDport, segEport, segFport, segGport, segDPport;
 #define SEG_A_PORT PORTD
@@ -28,6 +33,8 @@
 #define SEG_DP_PORT PORTD
 #define SEG_DP_PIN  6
 
+
+
 //******Syntax error...wish this would work
 //wired up in hardware
 //                      A,     B,     C,     D,     E,     F,     G,     DP
@@ -42,6 +49,47 @@
 
 //holds pin# assignment when passed in
 //uint8_t displayDigit1pin, displayDigit2pin, displayDigit3pin, displayDigit4pin;
+
+//segment bit order: A, B, C, D, E, F, G, DP
+uint8_t digits [16] = {
+		0b11111100, // 0
+		0b01100000, // 1
+		0b11011010, // 2
+		0b11110010, // 3
+		0b01100110, // 4
+		0b10110110, // 5
+		0b10111110, // 6
+		0b11100000, // 7
+		0b11111110, // 8
+		0b11110110, // 9
+		//0b1110111, // 65 'A'
+		//0b0011111, // 66 'B'
+		0b10011100, // 12  "C"
+		//0b0111101, // 68 'D'
+		0b10011110, // 69 'E'
+		0b10001110, // 15  "F"
+		//0b1011110, // 71 'G'
+		//0b0110111, // 72 'H'
+		//0b0110000, // 73 'I'
+		//0b0111000, // 74 'J'
+		//0b0000000, // 75 'K'  NO DISPLAY
+		//0b0001110, // 76 'L'
+		//0b0000000, // 77 'M'  NO DISPLAY
+		0b00101010, // 78 'N'
+		//0b1111110, // 79 'O'
+		//0b1100111, // 80 'P'
+		//0b1110011, // 81 'Q'
+		//0b0000101, // 82 'R'
+		0b10110110, // 83 'S'
+		//0b0001111, // 84 'T'
+		//0b0111110, // 85 'U'
+		//0b0000000, // 86 'V'  NO DISPLAY
+		0b01111110 // W
+		//0b0000000, // 88 'X'  NO DISPLAY
+		//0b0111011, // 89 'Y'
+		//0b0000000, // 90 'Z'  NO DISPLAY
+
+};
 
 uint8_t zero = 0b1111110; // 0
 uint8_t one = 0b0110000; // 1
@@ -86,7 +134,8 @@ uint8_t w = 0b0111111; // W
 //		uint8_t displayDigit1pin, uint8_t displayDigit2pin, uint8_t displayDigit3pin, uint8_t displayDigit4pin
 //		);
 
+void computeDigitDisplay(char);
 void initDisplay();
+void lightUpDigitDisplay(uint8_t);
 void testDisplay();
-
 
