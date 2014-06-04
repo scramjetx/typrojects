@@ -56,9 +56,26 @@ int main(void)
 
 	while(1)
 	{
+		int i = 72;
+		char c [] = "999";
+		sprintf(c, "%d", i);
+
+		sendString(c);
+		sendString("\n\r");
+
+		if(c[0] =='7')
+			USART_SendChar(c[0]);
+
+		sendString("\n\r");
+
+		if(c[1] =='2')
+			USART_SendChar(c[1]);
+
+		sendString("\n\r");
+
 		// Send string
-		sendString ("Hello World\n\r");
-		sendString ("How are you?\n\r");
+		//sendString ("Hello World\n\r");
+		//sendString ("How are you?\n\r");
 		_delay_ms(500);
 	} //end while
 
