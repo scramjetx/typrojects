@@ -64,7 +64,7 @@ sizedummy: USART_Demo.elf
 
 avrdudedummy: USART_Demo.elf
 	@echo 'Invoking: AVRDude'
-	C:\WinAVR-20100110\bin\avrdude -pt4313 -cusbtiny -u -Uflash:w:USART_Demo.hex:a -Ulfuse:w:0xe4:m -Uhfuse:w:0xdf:m -Uefuse:w:0xff:m
+	C:\WinAVR-20100110\bin\avrdude -pt4313 -cusbtiny -Uflash:w:USART_Demo.hex:a
 	@echo 'Finished building: $@'
 	@echo ' '
 
