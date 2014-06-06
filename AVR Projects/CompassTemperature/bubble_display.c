@@ -11,9 +11,62 @@
 //		uint8_t displayDigit1pin, uint8_t displayDigit2pin, uint8_t displayDigit3pin, uint8_t displayDigit4pin
 //		)
 
+void charArrayDisplay(char * charArray)
+{
+	uint8_t numDigits = 1;	//min of 1 digit number
+	uint32_t delay = 100;
+
+	//turn on digit 1
+	DIGIT1_CATHODE_PORT &= ~(1<<DIGIT1_CATHODE_PIN);
+
+	//display
+	computeDigitDisplay(charArray[0]);
+	_delay_ms(delay);
+
+	//turn off digit
+	DIGIT1_CATHODE_PORT |= 1<<DIGIT1_CATHODE_PIN;
+
+
+
+	//turn on digit 2
+	DIGIT2_CATHODE_PORT &= ~(1<<DIGIT2_CATHODE_PIN);
+
+	//display
+	computeDigitDisplay(charArray[1]);
+	_delay_ms(delay);
+
+	//turn off digit
+	DIGIT2_CATHODE_PORT |= 1<<DIGIT2_CATHODE_PIN;
+
+
+
+	//turn on digit 3
+	DIGIT3_CATHODE_PORT &= ~(1<<DIGIT3_CATHODE_PIN);
+
+	//display
+	computeDigitDisplay(charArray[2]);
+	_delay_ms(delay);
+
+	//turn off digit
+	DIGIT3_CATHODE_PORT |= 1<<DIGIT3_CATHODE_PIN;
+
+
+
+	//turn on digit 4
+	DIGIT4_CATHODE_PORT &= ~(1<<DIGIT4_CATHODE_PIN);
+
+	//display
+	computeDigitDisplay(charArray[3]);
+	_delay_ms(delay);
+
+	//turn off digit
+	DIGIT4_CATHODE_PORT |= 1<<DIGIT4_CATHODE_PIN;
+
+
+}
 void computeDigitDisplay(char c)
 {
-	uint8_t computedDigit = 0;
+	uint8_t computedDigit = '~';
 
 //	USART_SendChar(c);
 
@@ -59,7 +112,22 @@ void computeDigitDisplay(char c)
 	{
 		computedDigit = digits[9];
 	}
-
+	else if(c == 'E')
+	{
+		computedDigit = digits[11];
+	}
+	else if(c == 'F')
+	{
+		computedDigit = digits[12];
+	}
+	else if(c == '_')
+	{
+		computedDigit = digits[16];
+	}
+	else if(c == '\0')
+	{
+		computedDigit = digits[17];
+	}
 
 	lightUpDigitDisplay(computedDigit);
 	//USART_SendString("Computed Digit: ");
@@ -75,7 +143,7 @@ void initDisplay()
 
 void lightUpDigitDisplay(uint8_t c)
 {
-	USART_SendChar(c);
+	//USART_SendChar(c);
 
 	if(c & 0b10000000)
 		SEG_A_PORT |= 1<<SEG_A_PIN;
@@ -102,11 +170,15 @@ void lightUpDigitDisplay(uint8_t c)
 
 void resetDisplay()
 {
-
-	//sets registers to 0 and effectively clears display
-	SEG_PORTS1 = 0;
-	SEG_PORTS2 = 0;
-	SEG_PORTS3 = 0;
+	//set each segment low to clear it
+	SEG_A_PORT &= ~(1<<SEG_A_PIN);
+	SEG_B_PORT &= ~(1<<SEG_B_PIN);
+	SEG_C_PORT &= ~(1<<SEG_C_PIN);
+	SEG_D_PORT &= ~(1<<SEG_D_PIN);
+	SEG_E_PORT &= ~(1<<SEG_E_PIN);
+	SEG_F_PORT &= ~(1<<SEG_F_PIN);
+	SEG_G_PORT &= ~(1<<SEG_G_PIN);
+	SEG_DP_PORT &= ~(1<<SEG_DP_PIN);
 }
 
 void testDisplay()
