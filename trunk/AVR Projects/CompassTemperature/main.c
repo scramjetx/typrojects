@@ -3,8 +3,8 @@
 //Design Notes:
 
 //What's Next?
-//now can display digits so display them in the correct place. add digit 1-4 parameter for digitDisplay function
 //then can change test temp to larger number so it prints 003F or 072F for the temp...or maybe no leading 0's
+//figure out how to do display loop so it samples at some slow rate 5hz...then displays the rest of the time at some rate..if want to adjust brightness
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 
@@ -16,11 +16,14 @@
 //#include "includes\bubble_display.h"
 
 #define LOOP_RATE 1				//how fast to run the loop
-#define TICKS_PER_HZ 100000		//how many ticks elapse per hz to get the loop rate
+#define TICKS_PER_HZ 1000		//how many ticks elapse per hz to get the loop rate
 
 
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
+int8_t degF = 123;			   //hold temp reading in deg F
+
+char displayArray [] = "999F"; //holds the string to be displayed
 
 //Function Prototypes
 void parseTempReading(char *, int8_t);
@@ -28,16 +31,16 @@ void parseTempReading(char *, int8_t);
 
 int main(void)
 {
-	//Segment Anodes
+	//Segment Anodes set to outputs
 	DDRA |= (1<<PA0) | (1<<PA1);
 	DDRB |= (1<<PB6) | (1<<PB2);
 	DDRD |= (1<<PD2) | (1<<PD3) | (1<<PD5) | (1<<PD6);
 
-	//Segment Cathodes
-	DDRB |= (1<<PB1) | (1<<PB3) | (1<<PB4); 	//Cathodes set to output
-	DDRD |= (1<<PD4);							//Cathodes set to output
-	PORTB |= (0<<PB1) | (0<<PB3) | (0<<PB4);	//pin set low.
-	PORTD |= (0<<PD4);							//pin set low.
+	//Segment Cathodes set to outputs
+	DDRB |= (1<<PB1) | (1<<PB3) | (1<<PB4);
+	DDRD |= (1<<PD4);
+	PORTB |= (1<<PB1) | (1<<PB3) | (1<<PB4);	//keep display digit high/off.
+	PORTD |= (1<<PD4);							//keep display digit high/off.
 
 	uint8_t STATE = 1;
 	int64_t timer = 1;  //placeholder for timer ticks to know when to start main state machine and clock how fast it loops
@@ -78,7 +81,7 @@ int main(void)
 
 
 
-				parseTempReading(tempDegArray, testTemp);
+				parseTempReading(tempDegArray, degF);
 
 				testTemp++;
 				if(testTemp>9)
@@ -94,17 +97,13 @@ int main(void)
 			//**********************************************
 			if(STATE == 3)
 			{
-				//test code
-//				if(tempDegArray[0] == '1')
-//					testDisplay();
-//
-//				USART_SendString(tempDegArray);
-//				USART_SendString("\n\r");
-				//end test code
 
-				computeDigitDisplay(tempDegArray[0]);
+				//build string up to 4 digits to send to display
+				//so take the digits in temp deg array and build a display array that's 4 wide
+				//of form '_12F' or '__5F'
 
 
+				charArrayDisplay(&displayArray);
 
 				STATE = 1; 	//return to first state
 			}

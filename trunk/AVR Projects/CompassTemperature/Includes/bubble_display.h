@@ -1,4 +1,4 @@
-#define SOME_CONST 99
+#define NUM_OF_DISPLAY_DIGITS 4
 
 //these declarations below maybe not needed for port cause declared in function prototype and can be used in function without reassignment
 
@@ -34,6 +34,19 @@
 #define SEG_DP_PIN  6
 
 
+//Segment Cathodes
+#define DIGIT1_CATHODE_PORT PORTB
+#define DIGIT1_CATHODE_PIN 1
+
+#define DIGIT2_CATHODE_PORT PORTD
+#define DIGIT2_CATHODE_PIN 4
+
+#define DIGIT3_CATHODE_PORT PORTB
+#define DIGIT3_CATHODE_PIN 3
+
+#define DIGIT4_CATHODE_PORT PORTB
+#define DIGIT4_CATHODE_PIN 4
+
 
 //******Syntax error...wish this would work
 //wired up in hardware
@@ -51,7 +64,7 @@
 //uint8_t displayDigit1pin, displayDigit2pin, displayDigit3pin, displayDigit4pin;
 
 //segment bit order: A, B, C, D, E, F, G, DP
-uint8_t digits [16] = {
+uint8_t digits [18] = {
 		0b11111100, // 0
 		0b01100000, // 1
 		0b11011010, // 2
@@ -84,11 +97,12 @@ uint8_t digits [16] = {
 		//0b0001111, // 84 'T'
 		//0b0111110, // 85 'U'
 		//0b0000000, // 86 'V'  NO DISPLAY
-		0b01111110 // W
+		0b01111110, // W
 		//0b0000000, // 88 'X'  NO DISPLAY
 		//0b0111011, // 89 'Y'
 		//0b0000000, // 90 'Z'  NO DISPLAY
-
+		0b00010000, // _
+		0b00000000  // \0 or NULL
 };
 
 uint8_t zero = 0b1111110; // 0
@@ -134,6 +148,7 @@ uint8_t w = 0b0111111; // W
 //		uint8_t displayDigit1pin, uint8_t displayDigit2pin, uint8_t displayDigit3pin, uint8_t displayDigit4pin
 //		);
 
+void charArrayDisplay(char*);
 void computeDigitDisplay(char);
 void initDisplay();
 void lightUpDigitDisplay(uint8_t);
