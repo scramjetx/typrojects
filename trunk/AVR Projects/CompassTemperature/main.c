@@ -3,9 +3,7 @@
 //Design Notes:
 
 //What's Next?
-//then can change test temp to larger number so it prints 003F or 072F for the temp...or maybe no leading 0's
 //figure out how to do display loop so it samples at some slow rate 5hz...then displays the rest of the time at some rate..if want to adjust brightness
-//figure out why merge temp display isn't displaying what I think it should. Passing arrays to functions is killing me.  Data looks like it's static.
 
 
 
@@ -25,7 +23,7 @@
 
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
-int8_t degReading = 123;			   //hold temp reading in deg F
+int8_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
 
@@ -90,24 +88,24 @@ int main(void)
 				parseTempReading(tempDegArray, degReading);
 				numDigits = findNumDigits(degReading);
 
-				//not working
-				USART_SendChar(numDigits);
-				USART_SendBlankline();
-
 				//Celsius or Farenheit?
 				displayTempUnits = 'F';
 
+				//***************************************
 				//Build temperature array to be displayed
 				if(numDigits == 1)
 				{
+					displayArray[0] = '_';
+					displayArray[1] = '_';
 					displayArray[2] = tempDegArray[0];
 				}
 				else if(numDigits == 2)
 				{
+					displayArray[0] = '_';
 					displayArray[1] = tempDegArray[0];
 					displayArray[2] = tempDegArray[1];
 				}
-				else if(numDigits == 2)
+				else if(numDigits == 3)
 				{
 					displayArray[0] = tempDegArray[0];
 					displayArray[1] = tempDegArray[1];
@@ -116,10 +114,16 @@ int main(void)
 
 				displayArray[3] = displayTempUnits;
 
-				USART_SendString(displayArray);
-				USART_SendBlankline();
+				//*********************************************
+
+
+				//USART_SendString(displayArray);
+				//USART_SendBlankline();
 
 				//test code
+				degReading++;
+				if(degReading>999)
+					degReading=100;
 				testTemp++;
 				if(testTemp>9)
 					testTemp = 0;
@@ -138,7 +142,6 @@ int main(void)
 				//build string up to 4 digits to send to display
 				//so take the digits in temp deg array and build a display array that's 4 wide
 				//of form '_12F' or '__5F'
-
 
 				charArrayDisplay(displayArray);
 
