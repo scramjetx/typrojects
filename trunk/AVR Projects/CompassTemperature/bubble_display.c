@@ -14,7 +14,7 @@
 void charArrayDisplay(char * charArray)
 {
 	uint8_t numDigits = 1;	//min of 1 digit number
-	uint32_t delay = 50;
+	uint32_t delay = 20;
 
 	//turn on digit 1
 	DIGIT1_CATHODE_PORT &= ~(1<<DIGIT1_CATHODE_PIN);

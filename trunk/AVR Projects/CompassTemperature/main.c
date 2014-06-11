@@ -9,13 +9,16 @@
 
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
+//to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
+//to change color of highlighted text got to preferences->editors->text editors->annotations
 
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include <inttypes.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+#include <stdbool.h>
 
-//#include "includes\bubble_display.h"
 
 #define LOOP_RATE 1				//how fast to run the loop
 #define TICKS_PER_HZ 1000		//how many ticks elapse per hz to get the loop rate
@@ -26,13 +29,31 @@ char tempDegArray [] = "999";  //hold the char string of temperature reading for
 int8_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
+bool goFlag = false;			//tells main loop to process.  Keeps it running at defined rate
 
 char displayArray [] = "999F"; //holds the string to be displayed
 
 //Function Prototypes
 void parseTempReading(char *, int8_t);
 uint8_t findNumDigits(uint8_t);
-char * buildTempDisplayArray(char [], uint8_t, char);
+
+
+/********************************************************************************
+Interrupt Routines
+********************************************************************************/
+// timer1 overflw
+ISR(TIMER1_OVF_vect)
+{
+	//USART_SendChar('1');
+
+}
+
+// timer0 overflow
+ISR(TIMER0_OVF_vect)
+{
+	//USART_SendChar('0');
+	goFlag = true;
+}
 
 int main(void)
 {
@@ -54,6 +75,26 @@ int main(void)
 
 	USART_Init();
 
+	//*******************************
+	//Timer setup
+	//*******************************
+	// enable timer overflow interrupt for both Timer0 and Timer1
+	TIMSK=(1<<TOIE0) | (1<<TOIE1);
+
+	// set timer0 counter initial value to 0
+	TCNT0=0x00;
+
+	// start timer0 with /1024 prescaler
+	TCCR0B = (1<<CS02) | (1<<CS00);
+
+	// lets turn on 16 bit timer1 also with /1024
+	TCCR1B |= (1 << CS10) | (1 << CS12);
+
+	//*********************************************
+
+	// enable interrupts
+	sei();
+
 
 	int8_t testTemp = 0;
 
@@ -62,7 +103,7 @@ int main(void)
 	{
 
 
-		if(timer == TICKS_PER_HZ*LOOP_RATE)
+		if(goFlag)
 		{
 
 
@@ -132,6 +173,7 @@ int main(void)
 			}
 
 
+
 			//**********************************************
 			//State 3:
 			//display data
@@ -151,7 +193,7 @@ int main(void)
 			timer = 0;
 		} //end if
 
-		timer++;
+		goFlag = false;  //processing done
 
     } //end while(1)
 
