@@ -23,15 +23,19 @@
 #define LOOP_RATE 1				//how fast to run the loop
 #define TICKS_PER_HZ 1000		//how many ticks elapse per hz to get the loop rate
 
+#define TIMER0_SOFTWARE_PRESCALE 30
 
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
 int8_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
-bool goFlag = false;			//tells main loop to process.  Keeps it running at defined rate
+bool processDataFlag = false;			//tells main loop to process.  Keeps it running at defined rate
 
 char displayArray [] = "999F"; //holds the string to be displayed
+
+
+uint16_t timer0_2ndPrescaler = 0;  //timer 0 too fast so do a software prescaler to further slow it down
 
 //Function Prototypes
 void parseTempReading(char *, int8_t);
@@ -51,8 +55,15 @@ ISR(TIMER1_OVF_vect)
 // timer0 overflow
 ISR(TIMER0_OVF_vect)
 {
-	//USART_SendChar('0');
-	goFlag = true;
+	//CLK = 8Mhz/256 count register / 1024 hardware prescale / 30 count software prescale = 1hz update rate
+	if(timer0_2ndPrescaler == TIMER0_SOFTWARE_PRESCALE)
+	{
+		USART_SendChar('0');
+		processDataFlag = true;
+		timer0_2ndPrescaler = 0;
+	}
+
+	timer0_2ndPrescaler++;
 }
 
 int main(void)
@@ -69,7 +80,6 @@ int main(void)
 	PORTD |= (1<<PD4);							//keep display digit high/off.
 
 	uint8_t STATE = 1;
-	int64_t timer = 1;  //placeholder for timer ticks to know when to start main state machine and clock how fast it loops
 
 	//timer must be incremented by an interrupt or equivalent...then reset when bottom of if statement
 
@@ -90,6 +100,9 @@ int main(void)
 	// lets turn on 16 bit timer1 also with /1024
 	TCCR1B |= (1 << CS10) | (1 << CS12);
 
+	// set timer0 counter initial value to 0
+	TCNT1=0x00;
+
 	//*********************************************
 
 	// enable interrupts
@@ -103,7 +116,7 @@ int main(void)
 	{
 
 
-		if(goFlag)
+		if(processDataFlag)
 		{
 
 
@@ -190,10 +203,9 @@ int main(void)
 				STATE = 1; 	//return to first state
 			}
 
-			timer = 0;
 		} //end if
 
-		goFlag = false;  //processing done
+		processDataFlag = false;  //processing done
 
     } //end while(1)
 
