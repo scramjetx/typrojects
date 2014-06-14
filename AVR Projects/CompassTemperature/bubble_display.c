@@ -14,7 +14,7 @@
 void charArrayDisplay(char * charArray)
 {
 	uint8_t numDigits = 1;	//min of 1 digit number
-	uint32_t delay = 20;
+	uint32_t delay = 1; //does't work if 0... and larger than 7 flickers...
 
 	//turn on digit 1
 	DIGIT1_CATHODE_PORT &= ~(1<<DIGIT1_CATHODE_PIN);

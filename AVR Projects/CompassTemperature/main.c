@@ -3,9 +3,9 @@
 //Design Notes:
 
 //What's Next?
-//figure out how to do display loop so it samples at some slow rate 5hz...then displays the rest of the time at some rate..if want to adjust brightness
-
-
+//can't really adjust brightness...could work that if wanted
+//sample an ADC and pass int to display
+//found out ATTINY4313 HAS NO FREAKING ADC...order ATTINY861V-10PU as a drop in replacment
 
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
@@ -30,12 +30,14 @@ char tempDegArray [] = "999";  //hold the char string of temperature reading for
 int8_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
-volatile bool processDataFlag = false;	//Volatile if in ISR.  Tells main loop to process.  Keeps it running at defined rate
+
 
 char displayArray [] = "999F"; //holds the string to be displayed
 
 
 volatile uint16_t timer0_2ndPrescaler = 0;  //timer 0 too fast so do a software prescaler to further slow it down
+volatile bool processDataFlag = false;	//Volatile if in ISR.  Tells main loop to process.  Keeps it running at defined rate
+volatile bool refreshDisplayFlag = false;	//Refreshes display during times when the data is not being processed.
 
 //Function Prototypes
 void parseTempReading(char *, int8_t);
@@ -60,6 +62,7 @@ ISR(TIMER0_OVF_vect)
 	{
 		USART_SendChar('0');
 		processDataFlag = true;
+		refreshDisplayFlag = false;
 		timer0_2ndPrescaler = 0;
 	}
 
@@ -118,7 +121,7 @@ int main(void)
 
 		if(processDataFlag)
 		{
-			processDataFlag = false;  //reset the flag
+
 
 			USART_SendChar('P');
 
@@ -207,8 +210,17 @@ int main(void)
 				STATE = 1; 	//return to first state
 			}
 
+			processDataFlag = false;  //processing finished
+			refreshDisplayFlag = true;
+
 		} //end if
 
+		if(refreshDisplayFlag)
+		{
+			USART_SendChar('R');
+			charArrayDisplay(displayArray);
+
+		}
 
 
     } //end while(1)
