@@ -30,12 +30,12 @@ char tempDegArray [] = "999";  //hold the char string of temperature reading for
 int8_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
-bool processDataFlag = false;			//tells main loop to process.  Keeps it running at defined rate
+volatile bool processDataFlag = false;	//Volatile if in ISR.  Tells main loop to process.  Keeps it running at defined rate
 
 char displayArray [] = "999F"; //holds the string to be displayed
 
 
-uint16_t timer0_2ndPrescaler = 0;  //timer 0 too fast so do a software prescaler to further slow it down
+volatile uint16_t timer0_2ndPrescaler = 0;  //timer 0 too fast so do a software prescaler to further slow it down
 
 //Function Prototypes
 void parseTempReading(char *, int8_t);
@@ -118,7 +118,9 @@ int main(void)
 
 		if(processDataFlag)
 		{
+			processDataFlag = false;  //reset the flag
 
+			USART_SendChar('P');
 
 			//**********************************************
 			//State 1:
@@ -126,7 +128,7 @@ int main(void)
 			//**********************************************
 			if(STATE == 1 )
 			{
-
+				USART_SendChar('1');
 
 				STATE = 2;  //transition to next state
 			}
@@ -138,6 +140,7 @@ int main(void)
 			//**********************************************
 			if(STATE == 2)
 			{
+				USART_SendChar('2');
 
 				parseTempReading(tempDegArray, degReading);
 				numDigits = findNumDigits(degReading);
@@ -193,6 +196,7 @@ int main(void)
 			//**********************************************
 			if(STATE == 3)
 			{
+				USART_SendChar('3');
 
 				//build string up to 4 digits to send to display
 				//so take the digits in temp deg array and build a display array that's 4 wide
@@ -205,7 +209,7 @@ int main(void)
 
 		} //end if
 
-		processDataFlag = false;  //processing done
+
 
     } //end while(1)
 
