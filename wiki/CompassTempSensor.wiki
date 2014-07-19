@@ -1,13 +1,8 @@
-#summary One-sentence summary of this page.
+#Track my Compass Temperature Sensor Project
 
 = Introduction =
 
-Add your content here.
+I wanted to learn AVRs and make a compass and temperature sensor I could mount to my motor cycle with a cool display.
 
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Important Links =
