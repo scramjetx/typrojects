@@ -46,7 +46,7 @@ all: CompassTemperature.elf secondary-outputs
 CompassTemperature.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C Linker'
-	avr-gcc -Wl,-Map,CompassTemperature.map -mmcu=attiny4313 -o "CompassTemperature.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-gcc -Wl,-Map,CompassTemperature.map -mmcu=atmega32u4 -o "CompassTemperature.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -58,13 +58,13 @@ CompassTemperature.hex: CompassTemperature.elf
 
 sizedummy: CompassTemperature.elf
 	@echo 'Invoking: Print Size'
-	-avr-size --format=avr --mcu=attiny4313 CompassTemperature.elf
+	-avr-size --format=avr --mcu=atmega32u4 CompassTemperature.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
 avrdudedummy: CompassTemperature.elf
 	@echo 'Invoking: AVRDude'
-	C:\WinAVR-20100110\bin\avrdude -pt4313 -cusbtiny -Uflash:w:CompassTemperature.hex:a
+	C:\WinAVR-20100110\bin\avrdude -pm32u4 -cusbtiny -Uflash:w:CompassTemperature.hex:a
 	@echo 'Finished building: $@'
 	@echo ' '
 
