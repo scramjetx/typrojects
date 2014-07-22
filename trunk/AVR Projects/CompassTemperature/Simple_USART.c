@@ -12,12 +12,12 @@
 void USART_Init(void)
 {
 	// Set baud rate
-	UBRRH = (uint8_t)(USART_UBBR_VALUE>>8);
-	UBRRL = (uint8_t)USART_UBBR_VALUE;
+	UBRR1H = (uint8_t)(USART_UBBR_VALUE>>8);
+	UBRR1L = (uint8_t)USART_UBBR_VALUE;
 	// Set frame format to 8 data bits, no parity, 1 stop bit
-	UCSRC = (0<<USBS)|(1<<UCSZ1)|(1<<UCSZ0);
+	UCSR1C = (3<<UCSZ10);
 	// Enable receiver and transmitter
-	UCSRB = (1<<RXEN)|(1<<TXEN);
+	UCSR1B = (1<<RXEN1)|(1<<TXEN1);
 }
 
 void USART_SendBlankline()
@@ -28,9 +28,9 @@ void USART_SendBlankline()
 void USART_SendChar(uint8_t data)
 {
 	// Wait if a byte is being transmitted
-	while((UCSRA&(1<<UDRE)) == 0);
+	while((UCSR1A&(1<<UDRE1)) == 0);
 	// Transmit data
-	UDR = data;
+	UDR1 = data;
 }
 
 void USART_SendString(char s[]) {

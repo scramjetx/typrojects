@@ -3,49 +3,49 @@
 //these declarations below maybe not needed for port cause declared in function prototype and can be used in function without reassignment
 
 //defines ports that the led segments are on so we can clear them which resets the display
-#define SEG_PORTS1 PORTA
-#define SEG_PORTS2 PORTB
-#define SEG_PORTS3 PORTD
+#define SEG_PORTS1 PORTB
+#define SEG_PORTS2 PORTC
+#define SEG_PORTS3 PORTF
 
 //holds port assignment for each pin
 //uint8_t segAport, segBport, segCport, segDport, segEport, segFport, segGport, segDPport;
-#define SEG_A_PORT PORTD
-#define SEG_A_PIN  5
+#define SEG_A_PORT PORTC
+#define SEG_A_PIN  6
 
-#define SEG_B_PORT PORTD
-#define SEG_B_PIN  2
+#define SEG_B_PORT PORTC
+#define SEG_B_PIN  7
 
-#define SEG_C_PORT PORTB
-#define SEG_C_PIN  6
+#define SEG_C_PORT PORTF
+#define SEG_C_PIN  7
 
-#define SEG_D_PORT PORTA
-#define SEG_D_PIN  1
+#define SEG_D_PORT PORTF
+#define SEG_D_PIN  6
 
-#define SEG_E_PORT PORTD
-#define SEG_E_PIN  3
+#define SEG_E_PORT PORTF
+#define SEG_E_PIN  5
 
-#define SEG_F_PORT PORTB
-#define SEG_F_PIN  2
+#define SEG_F_PORT PORTF
+#define SEG_F_PIN  4
 
-#define SEG_G_PORT PORTA
-#define SEG_G_PIN  0
+#define SEG_G_PORT PORTF
+#define SEG_G_PIN  1
 
-#define SEG_DP_PORT PORTD
-#define SEG_DP_PIN  6
+#define SEG_DP_PORT PORTF
+#define SEG_DP_PIN  0
 
 
 //Segment Cathodes
 #define DIGIT1_CATHODE_PORT PORTB
-#define DIGIT1_CATHODE_PIN 1
+#define DIGIT1_CATHODE_PIN 4
 
-#define DIGIT2_CATHODE_PORT PORTD
-#define DIGIT2_CATHODE_PIN 4
+#define DIGIT2_CATHODE_PORT PORTB
+#define DIGIT2_CATHODE_PIN 5
 
 #define DIGIT3_CATHODE_PORT PORTB
-#define DIGIT3_CATHODE_PIN 3
+#define DIGIT3_CATHODE_PIN 6
 
 #define DIGIT4_CATHODE_PORT PORTB
-#define DIGIT4_CATHODE_PIN 4
+#define DIGIT4_CATHODE_PIN 7
 
 
 //******Syntax error...wish this would work

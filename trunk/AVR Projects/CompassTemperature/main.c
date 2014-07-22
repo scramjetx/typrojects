@@ -1,17 +1,20 @@
-//ATTINY 4313 chip
+//ATMEGA32U4 Breakout
 
 //Design Notes:
 
 //What's Next?
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
-//found out ATTINY4313 HAS NO FREAKING ADC...order ATTINY861V-10PU as a drop in replacment
-
+//get the breakout board to actually run the code.  Keeps erroring on DDRC variables that are standard for AVRs
+//maybe the timers aren't actually working.  May need to go back to basics with some simple demo code to iron out the bugs.
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
 //to change color of highlighted text got to preferences->editors->text editors->annotations
 
+/********************************************************************************
+Includes
+********************************************************************************/
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include <inttypes.h>
@@ -20,11 +23,17 @@
 #include <stdbool.h>
 
 
+/********************************************************************************
+Defines
+********************************************************************************/
 #define LOOP_RATE 1				//how fast to run the loop
 #define TICKS_PER_HZ 1000		//how many ticks elapse per hz to get the loop rate
 
 #define TIMER0_SOFTWARE_PRESCALE 30
 
+/********************************************************************************
+Global Variables
+********************************************************************************/
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
 int8_t degReading = 1;			   //hold temp reading in deg F
@@ -47,10 +56,10 @@ uint8_t findNumDigits(uint8_t);
 /********************************************************************************
 Interrupt Routines
 ********************************************************************************/
-// timer1 overflw
+// timer1 overflow
 ISR(TIMER1_OVF_vect)
 {
-	//USART_SendChar('1');
+	USART_SendChar('1');
 
 }
 
@@ -69,18 +78,20 @@ ISR(TIMER0_OVF_vect)
 	timer0_2ndPrescaler++;
 }
 
+
+
+/********************************************************************************
+Main
+********************************************************************************/
 int main(void)
 {
-	//Segment Anodes set to outputs
-	DDRA |= (1<<PA0) | (1<<PA1);
-	DDRB |= (1<<PB6) | (1<<PB2);
-	DDRD |= (1<<PD2) | (1<<PD3) | (1<<PD5) | (1<<PD6);
+	//Segment Anodes Init
+	DDRC |= (1<<PC6) | (1<<PC7);	//set direction
+	DDRF |= (1<<PF7) | (1<<PF6) | (1<<PF5) | (1<<PF4) | (1<<PF1) | (1<<PF0);	//set direction
 
-	//Segment Cathodes set to outputs
-	DDRB |= (1<<PB1) | (1<<PB3) | (1<<PB4);
-	DDRD |= (1<<PD4);
-	PORTB |= (1<<PB1) | (1<<PB3) | (1<<PB4);	//keep display digit high/off.
-	PORTD |= (1<<PD4);							//keep display digit high/off.
+	//Segment Cathodes Init
+	DDRB |= (1<<PB4) | (1<<PB5) | (1<<PB6) | (1<<PB7);		//set to outputs
+	PORTB |= (1<<PB4) | (1<<PB5) | (1<<PB6) | (1<<PB7);		//keep display digit high/off.
 
 	uint8_t STATE = 1;
 
@@ -92,10 +103,10 @@ int main(void)
 	//Timer setup
 	//*******************************
 	// enable timer overflow interrupt for both Timer0 and Timer1
-	TIMSK=(1<<TOIE0) | (1<<TOIE1);
+	TIMSK1 = (1<<TOIE0) | (1<<TOIE1);
 
 	// set timer0 counter initial value to 0
-	TCNT0=0x00;
+	TCNT0 = 0x00;
 
 	// start timer0 with /1024 prescaler
 	TCCR0B = (1<<CS02) | (1<<CS00);
@@ -104,7 +115,7 @@ int main(void)
 	TCCR1B |= (1 << CS10) | (1 << CS12);
 
 	// set timer0 counter initial value to 0
-	TCNT1=0x00;
+	TCNT1 = 0x00;
 
 	//*********************************************
 
@@ -229,7 +240,13 @@ int main(void)
 
 
 	return 0;
-}
+}//end main
+
+
+
+/********************************************************************************
+Routines
+********************************************************************************/
 
 void parseTempReading(char * c, int8_t i)
 {
