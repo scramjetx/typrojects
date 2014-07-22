@@ -1,8 +1,0 @@
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\bin\Debug\LineGraph.dll.config
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\bin\Debug\LineGraph.dll
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\bin\Debug\LineGraph.pdb
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\obj\Debug\ResolveAssemblyReference.cache
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\obj\Debug\Graph.LineGraph.resources
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\obj\Debug\LineGraph.csproj.GenerateResource.Cache
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\obj\Debug\LineGraph.dll
-D:\C# Projects\TrackingTest\Trunk\MyAForgeToolbox\LineGraph\obj\Debug\LineGraph.pdb
