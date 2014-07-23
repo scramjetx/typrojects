@@ -64,7 +64,7 @@ sizedummy: CompassTemperature.elf
 
 avrdudedummy: CompassTemperature.elf
 	@echo 'Invoking: AVRDude'
-	C:\WinAVR-20100110\bin\avrdude -pm32u4 -cusbtiny -Uflash:w:CompassTemperature.hex:a
+	C:\WinAVR-20100110\bin\avrdude -pm32u4 -cusbtiny -u -Uflash:w:CompassTemperature.hex:a -Ulfuse:w:0xc2:m -Uhfuse:w:0xd0:m -Uefuse:w:0xc3:m
 	@echo 'Finished building: $@'
 	@echo ' '
 
