@@ -6,7 +6,8 @@
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
 //get the breakout board to actually run the code.  Keeps erroring on DDRC variables that are standard for AVRs
-//maybe the timers aren't actually working.  May need to go back to basics with some simple demo code to iron out the bugs.
+//got the code running.  The fuses were set for external oscillator.  changed to internal and 8 mhz worked like a charm.
+
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -56,12 +57,6 @@ uint8_t findNumDigits(uint8_t);
 /********************************************************************************
 Interrupt Routines
 ********************************************************************************/
-// timer1 overflow
-ISR(TIMER1_OVF_vect)
-{
-	USART_SendChar('1');
-
-}
 
 // timer0 overflow
 ISR(TIMER0_OVF_vect)
@@ -69,7 +64,7 @@ ISR(TIMER0_OVF_vect)
 	//CLK = 8Mhz/256 count register / 1024 hardware prescale / 30 count software prescale = 1hz update rate
 	if(timer0_2ndPrescaler == TIMER0_SOFTWARE_PRESCALE)
 	{
-		USART_SendChar('0');
+		USART_SendChar('S');
 		processDataFlag = true;
 		refreshDisplayFlag = false;
 		timer0_2ndPrescaler = 0;
@@ -78,6 +73,13 @@ ISR(TIMER0_OVF_vect)
 	timer0_2ndPrescaler++;
 }
 
+// timer1 overflow
+//CLK = 8mhz/2^16bit timer / 1024 = .119hz; 1/.119hz = Every 8.3sec it trips
+ISR(TIMER1_OVF_vect)
+{
+	USART_SendChar('W');
+
+}
 
 
 /********************************************************************************
@@ -95,18 +97,18 @@ int main(void)
 
 	uint8_t STATE = 1;
 
-	//timer must be incremented by an interrupt or equivalent...then reset when bottom of if statement
-
 	USART_Init();
 
 	//*******************************
 	//Timer setup
 	//*******************************
 	// enable timer overflow interrupt for both Timer0 and Timer1
-	TIMSK1 = (1<<TOIE0) | (1<<TOIE1);
+	TIMSK0 = (1<<TOIE0);
+	TIMSK1 = (1<<TOIE1);
 
 	// set timer0 counter initial value to 0
 	TCNT0 = 0x00;
+	TCNT1 = 0x00;
 
 	// start timer0 with /1024 prescaler
 	TCCR0B = (1<<CS02) | (1<<CS00);
@@ -114,8 +116,6 @@ int main(void)
 	// lets turn on 16 bit timer1 also with /1024
 	TCCR1B |= (1 << CS10) | (1 << CS12);
 
-	// set timer0 counter initial value to 0
-	TCNT1 = 0x00;
 
 	//*********************************************
 
@@ -128,7 +128,6 @@ int main(void)
 
 	while(1)
 	{
-
 
 		if(processDataFlag)
 		{
@@ -228,7 +227,7 @@ int main(void)
 
 		if(refreshDisplayFlag)
 		{
-			USART_SendChar('R');
+			//USART_SendChar('R');
 			charArrayDisplay(displayArray);
 
 		}
