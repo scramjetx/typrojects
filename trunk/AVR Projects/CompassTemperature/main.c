@@ -5,7 +5,9 @@
 //What's Next?
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
-
+	//got it sampling adc and displaying.  But only 0 - 255 ie 8 bit reading.  I want full resolution prob
+	//then need to build up a table to lookup the temp from the thermistor.  check davo's software for table. same temp sensor.
+	//there is some inconsistencies with using unsigned/signed int.  so need to convert so need display to handle negative numbers.
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -13,9 +15,9 @@
 
 //if project doesn't recognize DCR or PORTB etc.. right click project and do index->rebuild.  Fixes the errors.
 
-/********************************************************************************
-Includes
-********************************************************************************/
+//********************************************************************************
+//Includes
+//********************************************************************************
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include <inttypes.h>
@@ -24,19 +26,20 @@ Includes
 #include <stdbool.h>
 
 
-/********************************************************************************
-Defines
-********************************************************************************/
+//********************************************************************************
+// Defines
+//********************************************************************************
 #define LOOP_RATE 1				//how fast to run the loop
 #define TICKS_PER_HZ 1000		//how many ticks elapse per hz to get the loop rate
 
-#define TIMER0_SOFTWARE_PRESCALE 30
+#define TIMER0_SOFTWARE_PRESCALE 7
 
-/********************************************************************************
-Global Variables
-********************************************************************************/
+//********************************************************************************
+// Global Variables
+//********************************************************************************
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
+uint8_t rawTempADC = 0;
 int8_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
@@ -54,17 +57,18 @@ void parseTempReading(char *, int8_t);
 uint8_t findNumDigits(uint8_t);
 
 
-/********************************************************************************
-Interrupt Routines
-********************************************************************************/
+//********************************************************************************
+// Interrupt Routines
+//********************************************************************************
 
 // timer0 overflow
 ISR(TIMER0_OVF_vect)
 {
-	//CLK = 8Mhz/256 count register / 1024 hardware prescale / 30 count software prescale = 1hz update rate
+	// This Timer sets display refresh rate
+	// CLK = 8Mhz/2^8bit count register / 1024 hardware prescale / 7 count software prescale = 4.4hz update rate
 	if(timer0_2ndPrescaler == TIMER0_SOFTWARE_PRESCALE)
 	{
-		USART_SendChar('S');
+		//USART_SendChar('S');
 		processDataFlag = true;
 		refreshDisplayFlag = false;
 		timer0_2ndPrescaler = 0;
@@ -74,32 +78,34 @@ ISR(TIMER0_OVF_vect)
 }
 
 // timer1 overflow
-//CLK = 8mhz/2^16bit timer / 64 precaler = 1.91hz; 1/1.91hz = Every .52sec it trips
+// CLK = 8mhz/2^16bit count timer / 8 prescaler = 15.3hz it trips;
 ISR(TIMER1_OVF_vect)
 {
-	USART_SendChar('W');
+	// This Timer1 overflow triggers ADC conversion which then interrupts in the ADC_Vect
+
+	//USART_SendChar('W');
 
 }
 
 //ADC Interrupt
 ISR(ADC_vect)
 {
-
-	USART_SendChar('A');
+	rawTempADC = ADCH;
+	//USART_SendChar('A');
 
 }
 
 
-/********************************************************************************
-Main
-********************************************************************************/
+//********************************************************************************
+// Main
+//********************************************************************************
 int main(void)
 {
-	//Segment Anodes Init
+	// Segment Anodes Init
 	DDRC |= (1<<PC6) | (1<<PC7);	//set direction
 	DDRF |= (1<<PF7) | (1<<PF6) | (1<<PF5) | (1<<PF4) | (1<<PF1) | (1<<PF0);	//set direction
 
-	//Segment Cathodes Init
+	// Segment Cathodes Init
 	DDRB |= (1<<PB4) | (1<<PB5) | (1<<PB6) | (1<<PB7);		//set to outputs
 	PORTB |= (1<<PB4) | (1<<PB5) | (1<<PB6) | (1<<PB7);		//keep display digit high/off.
 
@@ -108,7 +114,7 @@ int main(void)
 	USART_Init();
 
 	//*******************************
-	//Timer setup
+	// Timer setup
 	//*******************************
 	// enable timer overflow interrupt for both Timer0 and Timer1
 	TIMSK0 = (1<<TOIE0);
@@ -121,33 +127,34 @@ int main(void)
 	// start timer0 with /1024 prescaler
 	TCCR0B = (1<<CS02) | (1<<CS00);
 
-	// lets turn on 16 bit timer1 with /64 prescaler
-	TCCR1B |= (1 << CS11) | (1 << CS10);
+	// lets turn on 16 bit timer1 with /8 prescaler
+	TCCR1B |= (1 << CS11);
 	//*********************************************
 
 
 	//*******************************
-	//ADC setup
+	// ADC setup
 	//*******************************
-	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescaler to 128 - 125KHz sample rate @ 16MHz
+	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescaler to 128 - 62.5KHz sample rate @ 8MHz. Slowest can go
 
-	ADMUX |= (1 << REFS0); // Set ADC reference to AVCC
-	ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading
+	ADMUX |= (1 << REFS0); 					// Set ADC reference to AVCC
+	ADMUX |= (1 << ADLAR); 					// Left adjust ADC result to allow easy 8 bit reading
 
-	// No MUX values needed to be changed to use ADC0
+	//Mux bits set for ADC10
+	ADCSRB |= (1<< MUX5);
+	ADMUX |= (1<<MUX1);
 
-	ADCSRA |= (1 << ADFR);  // Set ADC to Free-Running Mode
-	ADCSRA |= (1 << ADEN);  // Enable ADC
+	ADCSRA |= (1 << ADATE);  				// Set ADC to auto trigger, Trigger is set in ADCSRB bits
+	ADCSRB |= (1 << ADTS2) | (1 << ADTS1);  // set trigger source to Timer1 Overflow
 
-	ADCSRA |= (1 << ADIE); 	//enable ADC interrupt
+	ADCSRA |= (1 << ADEN);  				// Enable ADC
+
+	ADCSRA |= (1 << ADIE); 					// enable ADC interrupt
 	//*********************************************
 
 
 	// enable interrupts
 	sei();
-
-
-	int8_t testTemp = 0;
 
 
 	while(1)
@@ -160,27 +167,41 @@ int main(void)
 			USART_SendChar('P');
 
 			//**********************************************
-			//State 1:
+			// State 1:
 			// Take measurement of compass or temperature depending on which one is selected
+			// Convert from counts to temperature
 			//**********************************************
 			if(STATE == 1 )
 			{
 				USART_SendChar('1');
+
+//test code
+				degReading = rawTempADC;
+				char test[] = "888";
+				//parseTempReading(test, rawTempADC);
+				sprintf(tempDegArray, "%d", rawTempADC);
+				numDigits = findNumDigits(rawTempADC);
+				//USART_SendBlankline();
+				//USART_SendString(tempDegArray);
+				//USART_SendBlankline();
+//end test code
+
+				//parseTempReading(tempDegArray, degReading);
+				//numDigits = findNumDigits(degReading);
 
 				STATE = 2;  //transition to next state
 			}
 
 
 			//**********************************************
-			//State 2:
-			//Parse reading into distinct digits for display
+			// State 2:
+			// Parse reading into distinct digits for display
 			//**********************************************
 			if(STATE == 2)
 			{
 				USART_SendChar('2');
 
-				parseTempReading(tempDegArray, degReading);
-				numDigits = findNumDigits(degReading);
+
 
 				//Celsius or Farenheit?
 				displayTempUnits = 'F';
@@ -214,13 +235,11 @@ int main(void)
 				//USART_SendString(displayArray);
 				//USART_SendBlankline();
 
-				//test code
+//test code
 				degReading++;
 				if(degReading>999)
 					degReading=100;
-				testTemp++;
-				if(testTemp>9)
-					testTemp = 0;
+//end test code
 
 				STATE = 3;	//transition to next state
 			}
@@ -228,8 +247,8 @@ int main(void)
 
 
 			//**********************************************
-			//State 3:
-			//display data
+			// State 3:
+			// display data
 			//**********************************************
 			if(STATE == 3)
 			{
@@ -267,9 +286,9 @@ int main(void)
 
 
 
-/********************************************************************************
-Routines
-********************************************************************************/
+//********************************************************************************
+//Routines
+//********************************************************************************
 
 void parseTempReading(char * c, int8_t i)
 {
