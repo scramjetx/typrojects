@@ -5,9 +5,9 @@
 //What's Next?
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
-	//got it sampling adc and displaying.  But only 0 - 255 ie 8 bit reading.  I want full resolution prob
 	//then need to build up a table to lookup the temp from the thermistor.  check davo's software for table. same temp sensor.
 	//there is some inconsistencies with using unsigned/signed int.  so need to convert so need display to handle negative numbers.
+	//run a little 0-5V sweep test with power supply just to make sure it's reading linearly.  The pot doesn't really.  Maybe just a POT issue
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -18,7 +18,7 @@
 //********************************************************************************
 //Includes
 //********************************************************************************
-#define F_CPU 8000000UL
+
 #include <avr/io.h>
 #include <inttypes.h>
 #include <util/delay.h>
@@ -29,18 +29,21 @@
 //********************************************************************************
 // Defines
 //********************************************************************************
+#define F_CPU 8000000UL
 #define LOOP_RATE 1				//how fast to run the loop
 #define TICKS_PER_HZ 1000		//how many ticks elapse per hz to get the loop rate
 
 #define TIMER0_SOFTWARE_PRESCALE 7
+
+#define ADCW    _SFR_MEM16(0x78) //trick I found online for combining the ADCH and ADCL into one read. Bit Shifting wasn't working
 
 //********************************************************************************
 // Global Variables
 //********************************************************************************
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
-uint8_t rawTempADC = 0;
-int8_t degReading = 1;			   //hold temp reading in deg F
+uint16_t rawTempADC = 0;
+int16_t degReading = 1;			   //hold temp reading in deg F
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
 
@@ -53,8 +56,8 @@ volatile bool processDataFlag = false;	//Volatile if in ISR.  Tells main loop to
 volatile bool refreshDisplayFlag = false;	//Refreshes display during times when the data is not being processed.
 
 //Function Prototypes
-void parseTempReading(char *, int8_t);
-uint8_t findNumDigits(uint8_t);
+void parseTempReading(char *, int16_t);
+uint16_t findNumDigits(uint16_t);
 
 
 //********************************************************************************
@@ -90,7 +93,8 @@ ISR(TIMER1_OVF_vect)
 //ADC Interrupt
 ISR(ADC_vect)
 {
-	rawTempADC = ADCH;
+	rawTempADC = ADCW;	//ADCW is a #define combo of ADCH and ADCL
+
 	//USART_SendChar('A');
 
 }
@@ -138,9 +142,9 @@ int main(void)
 	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescaler to 128 - 62.5KHz sample rate @ 8MHz. Slowest can go
 
 	ADMUX |= (1 << REFS0); 					// Set ADC reference to AVCC
-	ADMUX |= (1 << ADLAR); 					// Left adjust ADC result to allow easy 8 bit reading
+	//ADMUX |= (1 << ADLAR); 					// Left adjust ADC result to allow easy 8 bit reading
 
-	//Mux bits set for ADC10
+	// Mux bits set for ADC10
 	ADCSRB |= (1<< MUX5);
 	ADMUX |= (1<<MUX1);
 
@@ -177,17 +181,16 @@ int main(void)
 
 //test code
 				degReading = rawTempADC;
-				char test[] = "888";
-				//parseTempReading(test, rawTempADC);
-				sprintf(tempDegArray, "%d", rawTempADC);
-				numDigits = findNumDigits(rawTempADC);
-				//USART_SendBlankline();
-				//USART_SendString(tempDegArray);
-				//USART_SendBlankline();
+
+				char test[] = "8888";
+				sprintf(test, "%d", rawTempADC);
+				USART_SendBlankline();
+				USART_SendString(test);
+				USART_SendBlankline();
 //end test code
 
-				//parseTempReading(tempDegArray, degReading);
-				//numDigits = findNumDigits(degReading);
+				parseTempReading(tempDegArray, degReading);
+				numDigits = findNumDigits(degReading);
 
 				STATE = 2;  //transition to next state
 			}
@@ -290,7 +293,7 @@ int main(void)
 //Routines
 //********************************************************************************
 
-void parseTempReading(char * c, int8_t i)
+void parseTempReading(char * c, int16_t i)
 {
 	//sprintf takes alot of memory to convert a int to a string/char array
 	//could possibly do a modulus operation by 10 to extract digits to save memory
@@ -298,7 +301,7 @@ void parseTempReading(char * c, int8_t i)
 
 }
 
-uint8_t findNumDigits(uint8_t num)
+uint16_t findNumDigits(uint16_t num)
 {
 
 	if ( num < 10 )
