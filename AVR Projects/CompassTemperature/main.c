@@ -7,7 +7,6 @@
 //sample an ADC and pass int to display
 	//then need to build up a table to lookup the temp from the thermistor.  check davo's software for table. same temp sensor.
 	//there is some inconsistencies with using unsigned/signed int.  so need to convert so need display to handle negative numbers.
-	//run a little 0-5V sweep test with power supply just to make sure it's reading linearly.  The pot doesn't really.  Maybe just a POT issue
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -91,6 +90,7 @@ ISR(TIMER1_OVF_vect)
 }
 
 //ADC Interrupt
+//measured 4.88mV/count linearly with 5V sweep.  so Counts = 1V/4.88mV = 205 Counts
 ISR(ADC_vect)
 {
 	rawTempADC = ADCW;	//ADCW is a #define combo of ADCH and ADCL
