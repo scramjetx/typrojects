@@ -13,8 +13,7 @@
 #include <util/delay.h>
 
 //NOTE to get this baud have to disable divide clock by 8 command inside the fuse bits via settings menu.
-#define BAUD
-#define USART_BAUD 9600L
+#define USART_BAUD 115200L	//terminal locks in at 128000 instead...idk why
 #define USART_UBBR_VALUE ((F_CPU/(USART_BAUD<<4))-1)
 
 
