@@ -5,8 +5,9 @@
 //What's Next?
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
-	//then need to build up a table to lookup the temp from the thermistor.  check davo's software for table. same temp sensor.
 	//there is some inconsistencies with using unsigned/signed int.  so need to convert so need display to handle negative numbers.
+	//lookup table working but there is multiple adc readings per temp cause not rounded...need to manually insert to account for that.
+	//or create a table with higher resolution..then round the cells and delete any duplicate ADC values until you have consecutive ADC table values for each temp
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -34,7 +35,7 @@
 
 #define TIMER0_SOFTWARE_PRESCALE 7
 
-#define ADCW    _SFR_MEM16(0x78) //trick I found online for combining the ADCH and ADCL into one read. Bit Shifting wasn't working
+#define ADCW _SFR_MEM16(0x78) //trick I found online for combining the ADCH and ADCL into one read. Bit Shifting wasn't working
 
 //********************************************************************************
 // Global Variables
@@ -167,8 +168,8 @@ int main(void)
 		if(processDataFlag)
 		{
 
-
-			USART_SendChar('P');
+			//USART_SendBlankline();
+			//USART_SendChar('P');
 
 			//**********************************************
 			// State 1:
@@ -177,7 +178,7 @@ int main(void)
 			//**********************************************
 			if(STATE == 1 )
 			{
-				USART_SendChar('1');
+				//USART_SendChar('1');
 
 //test code
 				degReading = rawTempADC;
@@ -185,8 +186,19 @@ int main(void)
 				char test[] = "8888";
 				sprintf(test, "%d", rawTempADC);
 				USART_SendBlankline();
+				USART_SendString("ADC = ");
 				USART_SendString(test);
 				USART_SendBlankline();
+
+				int16_t t = 0;
+				t = ConvertCountsToF(rawTempADC);
+				sprintf(test, "%d", t);
+				USART_SendBlankline();
+				USART_SendString("Temp = ");
+				USART_SendString(test);
+				USART_SendBlankline();
+
+
 //end test code
 
 				parseTempReading(tempDegArray, degReading);
@@ -202,7 +214,7 @@ int main(void)
 			//**********************************************
 			if(STATE == 2)
 			{
-				USART_SendChar('2');
+				//USART_SendChar('2');
 
 
 
@@ -255,7 +267,7 @@ int main(void)
 			//**********************************************
 			if(STATE == 3)
 			{
-				USART_SendChar('3');
+				//USART_SendChar('3');
 
 				//build string up to 4 digits to send to display
 				//so take the digits in temp deg array and build a display array that's 4 wide

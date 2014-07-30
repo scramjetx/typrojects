@@ -5,16 +5,19 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Simple_USART.c \
+../TempSensor.c \
 ../bubble_display.c \
 ../main.c 
 
 OBJS += \
 ./Simple_USART.o \
+./TempSensor.o \
 ./bubble_display.o \
 ./main.o 
 
 C_DEPS += \
 ./Simple_USART.d \
+./TempSensor.d \
 ./bubble_display.d \
 ./main.d 
 
