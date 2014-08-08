@@ -186,7 +186,7 @@ int main(void)
 				char test[] = "8888";
 				sprintf(test, "%d", rawTempADC);
 				USART_SendBlankline();
-				USART_SendString("ADC = ");
+				USART_SendString("ADC Counts = ");
 				USART_SendString(test);
 				USART_SendBlankline();
 
