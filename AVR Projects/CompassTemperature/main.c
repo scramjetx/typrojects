@@ -6,8 +6,9 @@
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
 	//there is some inconsistencies with using unsigned/signed int.  so need to convert so need display to handle negative numbers.
-	//lookup table working but there is multiple adc readings per temp cause not rounded...need to manually insert to account for that.
-	//or create a table with higher resolution..then round the cells and delete any duplicate ADC values until you have consecutive ADC table values for each temp
+	//temp conversion..need to find canned example that does it efficiently without decimal point usage.
+
+
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -91,7 +92,8 @@ ISR(TIMER1_OVF_vect)
 }
 
 //ADC Interrupt
-//measured 4.88mV/count linearly with 5V sweep.  so Counts = 1V/4.88mV = 205 Counts
+// 10 bit ADC.  5V/2^10 = 4.883mV/Count theoretical
+//measured 4.883mV/count linearly with 5V sweep.  so Counts = 1V/4.88mV = 205 Counts
 ISR(ADC_vect)
 {
 	rawTempADC = ADCW;	//ADCW is a #define combo of ADCH and ADCL
@@ -180,27 +182,11 @@ int main(void)
 			{
 				//USART_SendChar('1');
 
-//test code
 				degReading = rawTempADC;
 
-				char test[] = "8888";
-				sprintf(test, "%d", rawTempADC);
-				USART_SendBlankline();
-				USART_SendString("ADC Counts = ");
-				USART_SendString(test);
-				USART_SendBlankline();
-
 				int16_t t = 0;
-				t = ConvertCountsToF(rawTempADC);
-				sprintf(test, "%d", t);
-				USART_SendBlankline();
-				USART_SendString("Temp = ");
-				USART_SendString(test);
-				USART_SendBlankline();
-
-
-//end test code
-
+				degReading = TMP36SensorReadingCalc(rawTempADC);
+				degReading = ConvertTempReading(24, 'C');
 				parseTempReading(tempDegArray, degReading);
 				numDigits = findNumDigits(degReading);
 

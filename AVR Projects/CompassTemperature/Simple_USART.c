@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <inttypes.h>
 #include <util/delay.h>
+#include <stdio.h>
 
 #include "includes/Simple_USART.h"
 
@@ -41,4 +42,11 @@ void USART_SendString(char s[]) {
 		if( s[i] == '\0' ) break; // quit on string terminator
 		USART_SendChar(s[i++]);
 	}
+}
+
+void USART_SendInt32(int32_t i)
+{
+	char c[10];
+	sprintf(c, "%ld", i);
+	USART_SendString(c);
 }

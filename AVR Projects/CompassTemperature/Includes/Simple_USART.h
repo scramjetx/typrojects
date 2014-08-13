@@ -21,6 +21,7 @@ void USART_Init(void);
 void USART_SendChar(uint8_t data);
 void USART_SendString(char s[]);
 void USART_SendBlankline();
+void USART_SendInt32(int32_t i);
 
 
 
