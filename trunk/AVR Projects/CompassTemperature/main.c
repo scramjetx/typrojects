@@ -5,7 +5,8 @@
 //What's Next?
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
-	//is it me or are the F temps skipping by 2???
+	//is it me or are the F temps skipping by 2??? It's an artifact of using ints and converting from C to F.  Need to use floats to fix. 4.444C = 40F
+	//add a send string and int32 function that formats correctly so don't need some much text to print out some data
 
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
