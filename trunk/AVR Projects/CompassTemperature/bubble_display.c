@@ -128,6 +128,10 @@ void computeDigitDisplay(char c)
 	{
 		computedDigit = digits[17];
 	}
+	else if(c == '-')
+	{
+		computedDigit = digits[18];
+	}
 
 	lightUpDigitDisplay(computedDigit);
 	//USART_SendString("Computed Digit: ");

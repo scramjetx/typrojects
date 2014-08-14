@@ -5,9 +5,7 @@
 //What's Next?
 //can't really adjust brightness...could work that if wanted
 //sample an ADC and pass int to display
-	//there is some inconsistencies with using unsigned/signed int.  so need to convert so need display to handle negative numbers.
-	//temp conversion..need to find canned example that does it efficiently without decimal point usage.
-
+	//is it me or are the F temps skipping by 2???
 
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
@@ -58,7 +56,7 @@ volatile bool refreshDisplayFlag = false;	//Refreshes display during times when 
 
 //Function Prototypes
 void parseTempReading(char *, int16_t);
-uint16_t findNumDigits(uint16_t);
+uint16_t findNumDigits(int16_t);
 
 
 //********************************************************************************
@@ -182,11 +180,24 @@ int main(void)
 			{
 				//USART_SendChar('1');
 
-				degReading = rawTempADC;
+//				USART_SendBlankline();
+//				USART_SendString("Counts = ");
+//				USART_SendInt32((int32_t)rawTempADC);
+//				USART_SendBlankline();
 
-				int16_t t = 0;
 				degReading = TMP36SensorReadingCalc(rawTempADC);
-				degReading = ConvertTempReading(24, 'C');
+
+//				USART_SendString("DegC = ");
+//				USART_SendInt32((int32_t)degReading);
+//				USART_SendBlankline();
+
+				degReading = ConvertTempReading(degReading, 'C');
+
+//				USART_SendString("degF = ");
+//				USART_SendInt32((int32_t)degReading);
+//				USART_SendBlankline();
+//				USART_SendBlankline();
+
 				parseTempReading(tempDegArray, degReading);
 				numDigits = findNumDigits(degReading);
 
@@ -209,26 +220,54 @@ int main(void)
 
 				//***************************************
 				//Build temperature array to be displayed
-				if(numDigits == 1)
+				//and handle negative temperatures
+				if(degReading >= 0)
 				{
-					displayArray[0] = '_';
-					displayArray[1] = '_';
-					displayArray[2] = tempDegArray[0];
-				}
-				else if(numDigits == 2)
-				{
-					displayArray[0] = '_';
-					displayArray[1] = tempDegArray[0];
-					displayArray[2] = tempDegArray[1];
-				}
-				else if(numDigits == 3)
-				{
-					displayArray[0] = tempDegArray[0];
-					displayArray[1] = tempDegArray[1];
-					displayArray[2] = tempDegArray[2];
-				}
+					if(numDigits == 1)
+					{
+						displayArray[0] = '_';
+						displayArray[1] = '_';
+						displayArray[2] = tempDegArray[0];
+					}
+					else if(numDigits == 2)
+					{
+						displayArray[0] = '_';
+						displayArray[1] = tempDegArray[0];
+						displayArray[2] = tempDegArray[1];
+					}
+					else if(numDigits == 3)
+					{
+						displayArray[0] = tempDegArray[0];
+						displayArray[1] = tempDegArray[1];
+						displayArray[2] = tempDegArray[2];
+					}
 
-				displayArray[3] = displayTempUnits;
+					displayArray[3] = displayTempUnits;
+				}
+				else
+				{
+					if(numDigits == 1)
+					{
+						displayArray[0] = '_';
+						displayArray[1] = tempDegArray[0];  //negative sign
+						displayArray[2] = tempDegArray[1];
+					}
+					else if(numDigits == 2)
+					{
+						displayArray[0] = tempDegArray[0];  //negative sign
+						displayArray[1] = tempDegArray[1];
+						displayArray[2] = tempDegArray[2];
+					}
+					else if(numDigits == 3)  //can't handle 3 digits correctly of negative.  Not enough digits
+					{
+						displayArray[0] = tempDegArray[1];
+						displayArray[1] = tempDegArray[2];
+						displayArray[2] = tempDegArray[3];
+					}
+
+					displayArray[3] = displayTempUnits;
+
+				}
 
 				//*********************************************
 
@@ -299,14 +338,14 @@ void parseTempReading(char * c, int16_t i)
 
 }
 
-uint16_t findNumDigits(uint16_t num)
+uint16_t findNumDigits(int16_t num)
 {
 
-	if ( num < 10 )
+	if ( num < 10 && num > -10 )
 		return 1;
-    if ( num < 100 )
+    if ( num < 100 && num > -100)
 	    return 2;
-    if ( num < 1000 )
+    if ( num < 1000 && num > -1000)
 		return 3;
 
 }
