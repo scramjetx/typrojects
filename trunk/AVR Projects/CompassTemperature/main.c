@@ -3,11 +3,12 @@
 //Design Notes:
 
 //What's Next?
-//can't really adjust brightness...could work that if wanted
-//sample an ADC and pass int to display
-	//is it me or are the F temps skipping by 2??? It's an artifact of using ints and converting from C to F.  Need to use floats to fix. 4.444C = 40F
-	//add a send string and int32 function that formats correctly so don't need some much text to print out some data
-
+	//can't really adjust brightness...could work that if wanted
+	//hookup the mag sensor and display that data
+	//cleanup some parts of the code into functions in main so main is a tight group of routine calls
+	//refactor state machine with enumerations instead of State = 1 like Dave does so this program can be good example in future.
+	//create an ADC.c and ADC.h so can reuse that code later
+	//create an timer.c and timer.h so can resuse that code later
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
@@ -25,6 +26,7 @@
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
+#include "includes/TempSensor.h"
 
 //********************************************************************************
 // Defines
@@ -43,7 +45,7 @@
 //Main variables
 char tempDegArray [] = "999";  //hold the char string of temperature reading for display
 uint16_t rawTempADC = 0;
-int16_t degReading = 1;			   //hold temp reading in deg F
+float degReading = 0;		   //hold temp reading
 uint8_t numDigits = 0;		   //store the number of digits the temp reading has
 char displayTempUnits = 'F';			//what units to display temp
 
@@ -107,6 +109,8 @@ ISR(ADC_vect)
 //********************************************************************************
 int main(void)
 {
+	uint8_t STATE = 1;		// init state machine to first state
+
 	// Segment Anodes Init
 	DDRC |= (1<<PC6) | (1<<PC7);	//set direction
 	DDRF |= (1<<PF7) | (1<<PF6) | (1<<PF5) | (1<<PF4) | (1<<PF1) | (1<<PF0);	//set direction
@@ -114,8 +118,6 @@ int main(void)
 	// Segment Cathodes Init
 	DDRB |= (1<<PB4) | (1<<PB5) | (1<<PB6) | (1<<PB7);		//set to outputs
 	PORTB |= (1<<PB4) | (1<<PB5) | (1<<PB6) | (1<<PB7);		//keep display digit high/off.
-
-	uint8_t STATE = 1;
 
 	USART_Init();
 
@@ -163,6 +165,9 @@ int main(void)
 	sei();
 
 
+	//********************************************************************************
+	// Main LOOP
+	//********************************************************************************
 	while(1)
 	{
 
@@ -181,26 +186,19 @@ int main(void)
 			{
 				//USART_SendChar('1');
 
-//				USART_SendBlankline();
-//				USART_SendString("Counts = ");
-//				USART_SendInt32((int32_t)rawTempADC);
-//				USART_SendBlankline();
+//USART_SendData("Counts = ", (int32_t)rawTempADC);
 
 				degReading = TMP36SensorReadingCalc(rawTempADC);
 
-//				USART_SendString("DegC = ");
-//				USART_SendInt32((int32_t)degReading);
-//				USART_SendBlankline();
+//USART_SendData("DegC = ", (int32_t)degReading);
 
 				degReading = ConvertTempReading(degReading, 'C');
 
-//				USART_SendString("degF = ");
-//				USART_SendInt32((int32_t)degReading);
-//				USART_SendBlankline();
-//				USART_SendBlankline();
+//USART_SendData("DegF = ", (int32_t)degReading);
+//USART_SendBlankline();
 
-				parseTempReading(tempDegArray, degReading);
-				numDigits = findNumDigits(degReading);
+				parseTempReading(tempDegArray, (int16_t)degReading);
+				numDigits = findNumDigits((int16_t)degReading);
 
 				STATE = 2;  //transition to next state
 			}
@@ -213,8 +211,6 @@ int main(void)
 			if(STATE == 2)
 			{
 				//USART_SendChar('2');
-
-
 
 				//Celsius or Farenheit?
 				displayTempUnits = 'F';
@@ -271,16 +267,6 @@ int main(void)
 				}
 
 				//*********************************************
-
-
-				//USART_SendString(displayArray);
-				//USART_SendBlankline();
-
-//test code
-				degReading++;
-				if(degReading>999)
-					degReading=100;
-//end test code
 
 				STATE = 3;	//transition to next state
 			}
