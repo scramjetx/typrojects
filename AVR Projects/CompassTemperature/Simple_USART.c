@@ -50,3 +50,11 @@ void USART_SendInt32(int32_t i)
 	sprintf(c, "%ld", i);	//%d is ONLY 16bit int whereas %ld is 16 or 32bit int.
 	USART_SendString(c);
 }
+
+void USART_SendData(char * s, int32_t i)
+{
+	USART_SendString(s);
+	USART_SendInt32(i);
+	USART_SendBlankline();
+
+}
