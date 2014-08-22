@@ -8,12 +8,11 @@
 	//cleanup some parts of the code into functions in main so main is a tight group of routine calls
 	//refactor state machine with enumerations instead of State = 1 like Dave does so this program can be good example in future.
 	//create an ADC.c and ADC.h so can reuse that code later
-	//create an timer.c and timer.h so can resuse that code later
+	//create an timer.c and timer.h so can reuse that code later
 
 //Optimizations on.  Properties->Build->Settings->Optimizations
 //to get rid of implicit declaration -> right click function then source add includes.  And magically solves it
 //to change color of highlighted text got to preferences->editors->text editors->annotations
-
 //if project doesn't recognize DCR or PORTB etc.. right click project and do index->rebuild.  Fixes the errors.
 
 //********************************************************************************
