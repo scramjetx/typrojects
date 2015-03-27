@@ -1,0 +1,8 @@
+#Track my Compass Temperature Sensor Project
+
+# Introduction #
+
+I wanted to learn AVRs and make a compass and temperature sensor I could mount to my motor cycle with a cool display.
+
+
+# Important Links #
